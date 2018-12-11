@@ -7,3 +7,12 @@ __pycache__/
 *.so
 
 .vscode/
+
+#test file
+train
+show.ipynb
+test.zip
+sample_submission.csv
+.ipynb_checkpoints/
+data/train.csv
+train.csv

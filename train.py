@@ -3,6 +3,8 @@ import time
 import torch
 from tqdm import tqdm
 
+from loss_function import f1_loss
+
 def train_model(model, 
     dataloaders, 
     criterion, 
@@ -23,7 +25,6 @@ def train_model(model,
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
-
         with tqdm(total) as t:
 
             for phase in ['train', 'val']:
@@ -38,13 +39,19 @@ def train_model(model,
                 for inputs, labels in dataloaders[phase]:
                     inputs = inputs.to(device)
                     labels = labels.to(device)
-
+                    
+                    #t.update(10)
+                    
                     optimizer.zero_grad()
 
                     with torch.set_grad_enabled(phase == 'train'):
                         predicts = model(inputs)
-                        loss = criterion(predicts, labels)
-
+                        #loss = criterion(predicts, labels)
+                        
+                        predicts=predicts.type(torch.DoubleTensor)
+                        labels=labels.type(torch.DoubleTensor)
+                        loss = f1_loss(predicts, labels)
+           
                         if phase == 'train':
                             loss.backward()
                             optimizer.step()
